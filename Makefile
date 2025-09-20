@@ -5,7 +5,7 @@ help:
 	echo "Targets: dev, build, run-api, run-rules, fmt, test"
 
 dev:
-	docker compose -f deploy/compose/docker-compose.yml up --build
+	docker compose -f deploy/compose/docker-compose.yaml up --build
 
 build:
 	docker build -f Dockerfile.api -t cg/api:dev .

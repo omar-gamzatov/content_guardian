@@ -2,12 +2,14 @@
 FROM node:20-alpine AS deps
 WORKDIR /app
 COPY apps/rules-engine/package*.json ./
+RUN npm install --package-lock-only
 RUN npm ci
 
 FROM node:20-alpine AS build
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY apps/rules-engine ./
+RUN npm install --save-dev @types/json-logic-js
 RUN npm run build
 
 FROM node:20-alpine
