@@ -1,0 +1,14 @@
+# .gitignore
+# Go
+bin/
+dist/
+*.out
+
+# Node
+node_modules/
+apps/rules-engine/dist
+
+# OS/IDE
+.DS_Store
+.vscode/
+.idea/

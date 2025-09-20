@@ -1,0 +1,19 @@
+# Dockerfile.rules (Node/TS)
+FROM node:20-alpine AS deps
+WORKDIR /app
+COPY apps/rules-engine/package*.json ./
+RUN npm ci
+
+FROM node:20-alpine AS build
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY apps/rules-engine ./
+RUN npm run build
+
+FROM node:20-alpine
+WORKDIR /app
+ENV NODE_ENV=production PORT=3000
+COPY --from=build /app/dist ./dist
+COPY --from=deps /app/node_modules ./node_modules
+EXPOSE 3000
+CMD ["node", "dist/index.js"]
