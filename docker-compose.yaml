@@ -1,0 +1,38 @@
+# deploy/compose/docker-compose.yml
+version: "3.8"
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    environment:
+      - PORT=8083
+      - RULES_URL=http://rules:3000
+    ports:
+      - "8083:8083"
+    depends_on:
+      - rules
+
+  rules:
+    build:
+      context: .
+      dockerfile: Dockerfile.rules
+    environment:
+      - PORT=3000
+    ports:
+      - "3000:3000"
+
+  nats:
+    image: nats:2.3.4
+    ports:
+      - 4222:4222
+      - 8222:8222
+
+  postgres:
+    image: postgres:13.3
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: user
+      POSTGRES_DB: content_guardian
