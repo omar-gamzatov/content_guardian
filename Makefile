@@ -22,3 +22,14 @@ fmt:
 
 test:
 	go test ./...
+
+.PHONY: lint
+lint: lint-go lint-ts
+
+.PHONY: lint-go
+lint-go:
+	golangci-lint run
+
+.PHONY: lint-ts
+lint-ts:
+	cd apps/rules-engine && npm run lint

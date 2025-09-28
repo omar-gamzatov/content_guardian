@@ -1,0 +1,22 @@
+# .air.conf
+[build]
+  cmd = "go build -o /out/api ./src"
+  bin = "./out/api"
+  log = "air.log"
+
+[color]
+  main = "cyan"
+
+[log]
+  level = "info"
+
+[watch]
+  includes = [
+    "apps/api/src/**/*",
+    "pkg/**/*"
+  ]
+  excludes = [
+    "out/**/*",
+    "vendor/**/*"
+  ]
+  stop_signal = "SIGKILL"

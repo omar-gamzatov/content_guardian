@@ -1,0 +1,9 @@
+repos:
+- repo: https://github.com/golangci/golangci-lint
+  rev: v1.42.1
+  hooks:
+    - id: golangci-lint
+- repo: https://github.com/pre-commit/mirrors-eslint
+  rev: v7.32.0
+  hooks:
+    - id: eslint

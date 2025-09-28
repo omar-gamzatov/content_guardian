@@ -1,22 +1,25 @@
-# deploy/compose/docker-compose.yml
-version: "3.8"
+---
 services:
   api:
     build:
-      context: .
-      dockerfile: Dockerfile.api
+      context: ./apps/api
+      dockerfile: Dockerfile
     environment:
       - PORT=8083
       - RULES_URL=http://rules:3000
+      - GOPROXY=https://proxy.golang.org,direct
+      - GOSUMDB=off
     ports:
       - "8083:8083"
     depends_on:
       - rules
+    volumes:
+      - .:/app
 
   rules:
     build:
-      context: .
-      dockerfile: Dockerfile.rules
+      context: ./apps/rules-engine
+      dockerfile: Dockerfile
     environment:
       - PORT=3000
     ports:
@@ -36,3 +39,14 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_USER: user
       POSTGRES_DB: content_guardian
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+volumes:
+  postgres_data:
+
+networks:
+  app-network:
+    driver: bridge
