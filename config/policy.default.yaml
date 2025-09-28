@@ -1,0 +1,33 @@
+version: v1.0
+tenant: default
+rules:
+  - id: threat_keywords_v1
+    when:
+      any:
+        - contains_any:
+            list: ["kill you", "hurt you", "найду тебя и", "убью тебя"]
+            case_insensitive: true
+        - regex: "(?:i\\s*will\\s*)?(?:hurt|kill)\\s*you"
+    effect:
+      category: violence_threat
+      score: 0.85
+      weight: 1.2
+  - id: profanity_ru_en
+    when:
+      contains_any_ref: profanity_en_ru_v1
+    effect:
+      category: profanity
+      score: 0.6
+thresholds:
+  violence_threat: { block: 0.9, soft_block: 0.7, allow: 0.3 }
+  toxicity:        { block: 0.92, soft_block: 0.75, allow: 0.3 }
+  sexual_explicit: { block: 0.9, soft_block: 0.7, allow: 0.2 }
+  identity_attack: { block: 0.9, soft_block: 0.7, allow: 0.3 }
+  profanity:       { block: 0.95, soft_block: 0.8, allow: 0.0 }
+decision:
+  conflict_resolution: max_severity
+  escalate_if:
+    - uncertainty > 0.15
+    - categories.many >= 3
+options:
+  pii_redaction: true

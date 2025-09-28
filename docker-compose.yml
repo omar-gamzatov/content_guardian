@@ -1,0 +1,65 @@
+services:
+  api:
+    build: ./api
+    environment:
+      REDIS_ADDR: "redis:6379"
+      POSTGRES_DSN: "postgres://postgres:postgres@db:5432/guardian?sslmode=disable"
+      NATS_URL: "nats://nats:4222"
+      ML_URL: "http://ml:8000"
+      POLICY_PATH: "/configs/policy.default.yaml"
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      nats:
+        condition: service_started
+      ml:
+        condition: service_healthy
+    volumes:
+      - ./configs:/configs:ro
+
+  ml:
+    build: ./ml
+    environment:
+      UVICORN_WORKERS: 1
+      UVICORN_LOG_LEVEL: info
+    ports:
+      - "8000:8000"
+
+  web-client:
+    build: ./web-client
+    environment:
+      API_BASE: "http://api:8080"
+      PORT: "3000"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: guardian
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d guardian"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  nats:
+    image: nats:2
+    command: ["-js"]
+    ports:
+      - "4222:4222"
+      - "8222:8222"

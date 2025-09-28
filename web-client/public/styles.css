@@ -1,0 +1,38 @@
+:root { color-scheme: light dark; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial; line-height: 1.5; }
+.container { max-width: 1000px; margin: 0 auto; padding: 1rem; }
+.grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+@media (min-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } }
+h1, h2, h3 { margin: 0.5rem 0; }
+label { display: block; margin: 0.75rem 0; }
+input, select, textarea { width: 100%; padding: 0.6rem; border: 1px solid #ccc; border-radius: 8px; background: canvas; color: canvastext; }
+button { padding: 0.6rem 1rem; border: none; border-radius: 8px; background: #4f46e5; color: #fff; cursor: pointer; }
+button:disabled { opacity: 0.6; cursor: not-allowed; }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; font-size: 0.95rem; }
+#status { min-height: 1.2rem; color: #666; }
+
+/* Verdict */
+.badge {
+  display: inline-block; padding: 0.25rem 0.5rem; border-radius: 999px;
+  font-size: 0.75rem; font-weight: 700; margin-right: 0.5rem;
+}
+.meta { color: #666; font-size: 0.9rem; margin-left: 0.5rem; }
+.verdict-meta { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
+
+/* Цвета для action/severity (по значению текст будет устанавливаться JS) */
+.badge.action-allow { background: #dcfce7; color: #166534; }
+.badge.action-soft_block { background: #ffe4b5; color: #92400e; }
+.badge.action-block { background: #fee2e2; color: #991b1b; }
+.badge.action-escalate { background: #e0e7ff; color: #3730a3; }
+
+.badge.severity-low { background: #eef2ff; color: #3730a3; }
+.badge.severity-medium { background: #fef3c7; color: #92400e; }
+.badge.severity-high { background: #fee2e2; color: #991b1b; }
+
+/* Таблица категорий */
+.table { width: 100%; border-collapse: collapse; }
+.table th, .table td { padding: 0.5rem; border-bottom: 1px solid color-mix(in oklab, canvas, black 10%); }
+.table thead th { text-align: left; font-weight: 700; }
+.table tbody tr:hover { background: color-mix(in oklab, canvas, black 4%); }
+.table .score { font-variant-numeric: tabular-nums; white-space: nowrap; }

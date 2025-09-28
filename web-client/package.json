@@ -1,0 +1,26 @@
+{
+  "name": "content-guardian-webclient",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:client": "esbuild src/client.ts --bundle --minify --sourcemap --outfile=dist/public/app.js",
+    "build:server": "tsc -p tsconfig.json",
+    "build": "rm -rf dist && mkdir -p dist/public && cp -r public/* dist/public/ && npm run build:client && npm run build:server",
+    "dev": "concurrently -k -n esbuild,server \"esbuild src/client.ts --bundle --sourcemap --outfile=dist/public/app.js --watch\" \"nodemon --watch dist --ext js --exec node dist/server.js\"",
+    "start": "node dist/server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "morgan": "^1.10.0",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.11.30",
+    "concurrently": "^9.0.1",
+    "esbuild": "^0.23.0",
+    "nodemon": "^3.1.4",
+    "typescript": "^5.5.4"
+  }
+}

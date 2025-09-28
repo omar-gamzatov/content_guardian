@@ -5,8 +5,8 @@ dist/
 *.out
 
 # Node
-node_modules/
-apps/rules-engine/dist
+web-client/node_modules
+web-client/dist
 
 # OS/IDE
 .DS_Store

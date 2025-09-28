@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Content Guardian — Demo</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="container">
+      <h1>Content Guardian — Text Moderation</h1>
+      <p>Откройте на телефоне: http://ВАШ_IP:3000</p>
+    </header>
+
+    <main class="container grid">
+      <section>
+        <h2>Ввод</h2>
+        <label>API Token (Bearer, опционально)
+          <input id="apiToken" type="password" placeholder="необязательно" />
+        </label>
+        <label>Tenant ID
+          <input id="tenant" type="text" value="default" />
+        </label>
+        <label>Policy Version (опц.)
+          <input id="policy" type="text" placeholder="например v1.0" />
+        </label>
+        <label>Response mode
+          <select id="mode">
+            <option value="sync" selected>sync</option>
+            <option value="async">async</option>
+          </select>
+        </label>
+        <label>Текст для модерации
+          <textarea id="text" rows="8">I will find you and hurt you.</textarea>
+        </label>
+        <button id="send">Проверить (Ctrl/Cmd+Enter)</button>
+        <p id="status"></p>
+      </section>
+
+      <section>
+        <h2>Verdict</h2>
+        <div class="verdict-meta">
+          <span id="v-action" class="badge"></span>
+          <span id="v-severity" class="badge"></span>
+          <span id="v-sla" class="meta"></span>
+        </div>
+
+        <form id="verdict-form" class="verdict-form" onsubmit="return false;">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Category (name)</th>
+                <th>Score</th>
+                <th>Source</th>
+              </tr>
+            </thead>
+            <tbody id="verdict-rows">
+              
+            </tbody>
+          </table>
+        </form>
+
+        <h3>Raw</h3>
+        <pre id="raw" class="mono"></pre>
+      </section>
+    </main>
+
+    <footer class="container">
+      <small>За мат извиняюсь :D</small>
+    </footer>
+
+    <script src="/app.js" defer></script>
+  </body>
+</html>

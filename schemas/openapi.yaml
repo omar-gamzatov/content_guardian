@@ -1,0 +1,85 @@
+openapi: 3.0.3
+info:
+  title: Content Guardian API
+  version: 0.1.0
+servers:
+  - url: https://guardian.local/api
+paths:
+  /v1/moderations:
+    post:
+      summary: Moderate text content
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [tenant_id, content]
+              properties:
+                tenant_id: { type: string }
+                request_id: { type: string }
+                response_mode: { type: string, enum: [sync, async], default: sync }
+                callback_url: { type: string, format: uri }
+                policy_version: { type: string }
+                content:
+                  type: object
+                  required: [type, text]
+                  properties:
+                    type: { type: string, enum: [text] }
+                    text: { type: string }
+                    lang_hint: { type: string }
+                metadata:
+                  type: object
+      responses:
+        '200':
+          description: Moderation verdict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModerationResponse'
+  /v1/policies/{tenant_id}:
+    get:
+      summary: Get active policy for tenant
+      parameters:
+        - in: path
+          name: tenant_id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Policy
+          content:
+            application/yaml: {}
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    CategoryScore:
+      type: object
+      properties:
+        name: { type: string }
+        score: { type: number, format: float }
+        source: { type: string, enum: [rule, model] }
+    Verdict:
+      type: object
+      properties:
+        action: { type: string, enum: [allow, soft_block, block, escalate] }
+        severity: { type: string, enum: [low, medium, high], nullable: true }
+        categories:
+          type: array
+          items: { $ref: '#/components/schemas/CategoryScore' }
+        explain:
+          type: object
+    ModerationResponse:
+      type: object
+      properties:
+        request_id: { type: string }
+        verdict: { $ref: '#/components/schemas/Verdict' }
+        sla:
+          type: object
+          properties:
+            latency_ms: { type: integer }
+            mode: { type: string }
